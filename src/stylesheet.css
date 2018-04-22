@@ -1,0 +1,75 @@
+body {
+  font: 14px 'Century Gothic', Futura, sans-serif;
+  margin: 20px;
+  background: #ccdbdc;
+}
+
+.goals-container {
+  margin-top: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.goal {
+  padding: 20px;
+  margin: 20px;
+}
+
+.streaks-container {
+  margin-top: 20px;
+}
+
+.streak {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.streak-interval {
+  background: #ccdbdc;
+  color: #ccdbdc;
+  height: 20px;
+  width: 100%;
+  text-align: center;
+  border: solid black 1px;
+  /*
+  box-sizing: border-box;
+  margin: 1px; */
+}
+
+.color-1 {
+  background: #80ced7;
+}
+
+.color-1-text {
+  color: #80ced7;
+}
+
+.color-2 {
+  background: #63c7b2;
+}
+
+.color-2-text {
+  color: #63c7b2;
+}
+
+.color-3 {
+  background: #8e6c88;
+}
+
+.color-3-text {
+  color: #8e6c88;
+}
+
+.color-4 {
+  background: #263d42;
+}
+
+.color-4-text {
+  color: #263d42;
+}
