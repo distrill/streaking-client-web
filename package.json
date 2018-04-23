@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "camelcase-keys": "^4.2.0",
     "eslint-config-uncoil": "^5.0.1",
+    "lodash": "^4.17.5",
     "moment": "^2.22.1",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-scripts": "1.1.4",
     "request": "^2.85.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "shortid": "^2.2.8"
   },
   "scripts": {
     "start": "react-scripts start",
