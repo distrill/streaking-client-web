@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
 import rp from 'request-promise';
 import { groupBy } from 'lodash';
-import camelcaseKeys from 'camelcase-keys';
+import camelCaseKeys from 'camelcase-keys';
 import shortId from 'shortid';
 import Goal from './goal';
 import GoalStreak from './goal_streak';
 
-async function fetchUserData() {
+async function fetchGoalData() {
   const options = {
     uri: 'http://localhost:3000/users/2',
     json: true,
   };
-  return rp(options).then(userInfo => {
-    const { goals, streaks } = userInfo;
 
-    const goalStreaks = Object.values(groupBy(camelcaseKeys(streaks), 'goalId'));
+  const userInfo = await rp(options);
+  const groupedGoals = groupBy(camelCaseKeys(userInfo.goals), 'id');
+  const groupedStreaks = groupBy(camelCaseKeys(userInfo.streaks), 'goalId');
 
-    return { goals, goalStreaks };
-  });
+  return Object.keys(groupedGoals).reduce((accum, i) => {
+    const goal = groupedGoals[i];
+    const streaks = groupedStreaks[i];
+    return [...accum, Object.assign({}, goal[0], { streaks })];
+  }, []);
 }
 
 class Container extends Component {
@@ -25,13 +28,12 @@ class Container extends Component {
     super(props);
     this.state = {
       goals: [],
-      goalStreaks: [],
     };
   }
 
   async componentDidMount() {
-    const userData = await fetchUserData();
-    this.setState(userData);
+    const goalData = await fetchGoalData();
+    this.setState({ goals: goalData });
   }
 
   render() {
@@ -40,9 +42,9 @@ class Container extends Component {
         {"this is the hook. it's catchy. you like it."}
 
         {/* streaks */}
-        {this.state.goalStreaks.length && (
+        {this.state.goals.length && (
           <div className="streaks-container">
-            {this.state.goalStreaks.map(streaks => {
+            {this.state.goals.map(({ streaks }) => {
               const key = shortId.generate();
               return <GoalStreak key={key} streaks={streaks} />;
             })}
