@@ -5,14 +5,15 @@ const propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
-function Goal({ name, description, id }) {
+function Goal({ name, description, id, onClick }) {
   return (
-    <div className={`goal color-${id}`}>
+    <button className={`goal color-${id}`} onClick={() => onClick(id)}>
       <div className="goal-name">{name}</div>
       <div className="goal-description">{description}</div>
-    </div>
+    </button>
   );
 }
 
