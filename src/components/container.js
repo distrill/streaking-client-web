@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import rp from 'request-promise';
-import { groupBy, maxBy, merge, cloneDeep } from 'lodash';
+import { groupBy, flatten, maxBy, cloneDeep } from 'lodash';
 import camelCaseKeys from 'camelcase-keys';
 import shortId from 'shortid';
 import moment from 'moment';
@@ -15,18 +15,35 @@ async function fetchUserData() {
   return rp(options).then(userInfo => {
     const { goals, streaks } = userInfo;
 
-    const goalStreaks = Object.values(groupBy(camelCaseKeys(streaks), 'goalId'));
+    const goalInfo = groupBy(camelCaseKeys(goals), 'id');
+    const streakInfo = groupBy(camelCaseKeys(streaks), 'goalId');
 
-    return { goals, goalStreaks };
+    return { goals: goalInfo, streaks: streakInfo };
   });
+}
+
+function today() {
+  return moment().format('YYYY-MM-DD');
+}
+
+function yesterday() {
+  return moment()
+    .subtract(1, 'day')
+    .format('YYYY-MM-DD');
+}
+
+function isOngoing(date, interval) {
+  if (date === today()) return true;
+  if (date === yesterday()) return true;
+  return moment(date).isSame(today(), interval);
 }
 
 class Container extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      goals: [],
-      goalStreaks: [],
+      goals: {},
+      streaks: {},
     };
 
     this.handleGoalClick = this.handleGoalClick.bind(this);
@@ -34,30 +51,31 @@ class Container extends Component {
 
   async componentDidMount() {
     const userData = await fetchUserData();
+    console.log(userData);
     this.setState(userData);
   }
 
   handleGoalClick(goalId) {
-    const goalStreak = this.state.goalStreaks.find(gs => gs[0].goalId === goalId);
-    console.log(goalStreak);
-    // const goal = this.state.goals.find(g => g.id === goalId);
-    // const maxStreak = maxBy(goal.streaks, 'dateEnd');
+    const streaks = this.state.streaks[goalId];
+    const maxStreak = maxBy(streaks, 'dateEnd');
 
-    // if (
-    //   maxStreak.dateEnd ===
-    //   moment()
-    //     .subtract(1, 'day')
-    //     .format('YYYY-MM-DD')
-    // ) {
-    //   maxStreak.dateEnd = moment().format('YYYY-MM-DD');
-    // } else {
-    //   goal.streaks.push(
-    //     Object.assign(cloneDeep(goal.streaks[0]), {
-    //       dateStart: moment().format('YYYY-MM-DD'),
-    //       dateEnd: moment().format('YYYY-MM-DD'),
-    //     })
-    //   );
-    // }
+    const { dateEnd, interval } = maxStreak;
+
+    if (isOngoing(dateEnd, interval)) {
+      console.log('update streak');
+      maxStreak.dateEnd = moment().format('YYYY-MM-DD');
+    } else {
+      console.log('new streak');
+      streaks.push(
+        Object.assign(cloneDeep(streaks[0]), {
+          dateStart: moment().format('YYYY-MM-DD'),
+          dateEnd: moment().format('YYYY-MM-DD'),
+        })
+      );
+    }
+
+    this.setState({ streaks: Object.assign({}, this.state.streaks, { [goalId]: streaks }) });
+    // console.log(this.state);
   }
 
   render() {
@@ -66,9 +84,9 @@ class Container extends Component {
         {"this is the hook. it's catchy. you like it."}
 
         {/* streaks */}
-        {this.state.goalStreaks.length && (
+        {Object.values(this.state.streaks).length && (
           <div className="streaks-container">
-            {this.state.goalStreaks.map(streaks => {
+            {Object.values(this.state.streaks).map(streaks => {
               const key = shortId.generate();
               return <GoalStreak key={key} streaks={streaks} />;
             })}
@@ -76,9 +94,9 @@ class Container extends Component {
         )}
 
         {/* goals */}
-        {this.state.goals.length && (
+        {Object.values(this.state.goals).length && (
           <div className="goals-container">
-            {this.state.goals.map(goal => {
+            {flatten(Object.values(this.state.goals)).map(goal => {
               const key = shortId.generate();
               return (
                 <Goal
