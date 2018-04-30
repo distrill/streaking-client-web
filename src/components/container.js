@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import rp from 'request-promise';
-import { groupBy, flatten, maxBy, cloneDeep } from 'lodash';
+import { groupBy, flatten, maxBy, cloneDeep, merge, omit } from 'lodash';
 import camelCaseKeys from 'camelcase-keys';
+import snakeCaseKeys from 'snakecase-keys';
 import shortId from 'shortid';
 import moment from 'moment';
 import Goal from './goal';
@@ -20,6 +21,23 @@ async function fetchUserData() {
 
     return { goals: goalInfo, streaks: streakInfo };
   });
+}
+
+function writeStreak(streak, method) {
+  return rp({
+    uri: 'http://localhost:3000/users/2/streaks',
+    json: true,
+    method,
+    body: snakeCaseKeys(streak),
+  });
+}
+
+function createNewStreak(streak) {
+  return writeStreak(omit(streak, 'id'), 'POST');
+}
+
+function updateStreak(streak) {
+  return writeStreak(streak, 'PUT');
 }
 
 function today() {
@@ -51,31 +69,32 @@ class Container extends Component {
 
   async componentDidMount() {
     const userData = await fetchUserData();
-    console.log(userData);
     this.setState(userData);
   }
 
-  handleGoalClick(goalId) {
+  async handleGoalClick(goalId) {
     const streaks = this.state.streaks[goalId];
     const maxStreak = maxBy(streaks, 'dateEnd');
-
     const { dateEnd, interval } = maxStreak;
 
     if (isOngoing(dateEnd, interval)) {
-      console.log('update streak');
+      // update current streak to include today as well
       maxStreak.dateEnd = moment().format('YYYY-MM-DD');
+      await updateStreak(maxStreak);
     } else {
-      console.log('new streak');
-      streaks.push(
-        Object.assign(cloneDeep(streaks[0]), {
-          dateStart: moment().format('YYYY-MM-DD'),
-          dateEnd: moment().format('YYYY-MM-DD'),
-        })
-      );
+      // there is no current streak to update,
+      // streak[0] is chosen to clone arbitrarily, any streak will do
+      // TODO what happens if there is no streak yet? (accumulator info should be on goal, not streak)
+      const newStreak = merge(cloneDeep(streaks[0]), {
+        dateStart: moment().format('YYYY-MM-DD'),
+        dateEnd: moment().format('YYYY-MM-DD'),
+      });
+      streaks.push(newStreak);
+      await createNewStreak(newStreak);
     }
 
-    this.setState({ streaks: Object.assign({}, this.state.streaks, { [goalId]: streaks }) });
-    // console.log(this.state);
+    const userData = await fetchUserData();
+    this.setState(userData);
   }
 
   render() {
@@ -83,7 +102,10 @@ class Container extends Component {
       <div>
         {"this is the hook. it's catchy. you like it."}
 
-        {/* streaks */}
+        {/*
+            streaks - stored in state keyed by goalId
+            we want to retain this grouping in child component
+        */}
         {Object.values(this.state.streaks).length && (
           <div className="streaks-container">
             {Object.values(this.state.streaks).map(streaks => {
@@ -93,7 +115,10 @@ class Container extends Component {
           </div>
         )}
 
-        {/* goals */}
+        {/*
+            goals - stored in state keyed by id
+            we want flat array of goals
+        */}
         {Object.values(this.state.goals).length && (
           <div className="goals-container">
             {flatten(Object.values(this.state.goals)).map(goal => {

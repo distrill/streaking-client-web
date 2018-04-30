@@ -36,10 +36,7 @@ body {
   height: 20px;
   width: 100%;
   text-align: center;
-  border: solid black 1px;
-  /*
-  box-sizing: border-box;
-  margin: 1px; */
+  border: solid rgba(0, 0, 0, 0.1) 1px;
 }
 
 .color-1 {
