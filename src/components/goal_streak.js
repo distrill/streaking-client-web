@@ -4,9 +4,10 @@ import moment from 'moment';
 import { flatten } from 'lodash';
 import shortId from 'shortid';
 
-function getFillIndexes({ dateStart, dateEnd, updateInterval }) {
+function getFillIndexes({ dateStart, dateEnd }, updateInterval) {
   const intervalStart = () => moment(dateStart, 'YYYY-MM-DD');
   const intervalEnd = () => moment(dateEnd, 'YYYY-MM-DD');
+
   const numIntervals = intervalEnd().diff(intervalStart(), updateInterval) + 1; // +1 here to include today
   return new Array(numIntervals).fill(null).map((_, i) => {
     return intervalStart()
@@ -17,25 +18,24 @@ function getFillIndexes({ dateStart, dateEnd, updateInterval }) {
 }
 
 const propTypes = {
+  goalId: PropTypes.number.isRequired,
+  updateInterval: PropTypes.string.isRequired,
   streaks: PropTypes.arrayOf(
     PropTypes.shape({
-      goalId: PropTypes.number.isRequired,
-      updateInterval: PropTypes.string.isRequired,
       dateStart: PropTypes.string.isRequired,
       dateEnd: PropTypes.string.isRequired,
     })
   ).isRequired,
 };
 
-function Streak({ streaks }) {
-  const { goalId, updateInterval } = streaks[0];
+function Streak({ streaks, updateInterval, goalId }) {
   const chartStart = () =>
     moment()
       .subtract(6, 'months')
       .startOf(updateInterval);
   const chartEnd = () => moment();
   const numIntervals = chartEnd().diff(chartStart(), updateInterval);
-  const indexes = flatten(streaks.map(getFillIndexes));
+  const indexes = flatten(streaks.map(streak => getFillIndexes(streak, updateInterval)));
 
   const intervals = new Array(numIntervals).fill(null).map((_, i) => {
     return {

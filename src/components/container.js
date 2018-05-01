@@ -106,11 +106,20 @@ class Container extends Component {
             streaks - stored in state keyed by goalId
             we want to retain this grouping in child component
         */}
-        {Object.values(this.state.streaks).length && (
+        {Object.values(this.state.goals).length && (
           <div className="streaks-container">
-            {Object.values(this.state.streaks).map(streaks => {
+            {Object.values(this.state.goals).map(([goal]) => {
+              const { updateInterval, id: goalId } = goal;
+              const streaks = this.state.streaks[goalId];
               const key = shortId.generate();
-              return <GoalStreak key={key} streaks={streaks} />;
+              return (
+                <GoalStreak
+                  key={key}
+                  streaks={streaks}
+                  goalId={goalId}
+                  updateInterval={updateInterval}
+                />
+              );
             })}
           </div>
         )}

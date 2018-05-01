@@ -1,5 +1,6 @@
 TODO:
-    [ ] accumulator info should be on goal, get streak template from goal not streaks[0]
+    [X] interval should be on goal
+    [X] accumulator info should be on goal, get streak template from goal not streaks[0]
     [ ] handle errors
     [ ] modal if not logged in
     [ ] add new goal
