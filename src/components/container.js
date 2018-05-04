@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import rp from 'request-promise';
-import { groupBy, flatten, maxBy, cloneDeep, merge, omit } from 'lodash';
+import { groupBy, flatten, maxBy, omit } from 'lodash';
 import camelCaseKeys from 'camelcase-keys';
 import snakeCaseKeys from 'snakecase-keys';
 import shortId from 'shortid';
 import moment from 'moment';
 import Goal from './goal';
 import GoalStreak from './goal_streak';
+import AddGoalModal from './add_goal_modal';
 
 async function fetchUserData() {
   const options = {
@@ -51,6 +52,7 @@ function yesterday() {
 }
 
 function isOngoing(date, interval) {
+  if (!date) return false;
   if (date === today()) return true;
   if (date === yesterday()) return true;
   return moment(date).isSame(today(), interval);
@@ -65,6 +67,7 @@ class Container extends Component {
     };
 
     this.handleGoalClick = this.handleGoalClick.bind(this);
+    this.createGoal = this.createGoal.bind(this);
   }
 
   async componentDidMount() {
@@ -72,23 +75,32 @@ class Container extends Component {
     this.setState(userData);
   }
 
-  async handleGoalClick(goalId) {
-    const streaks = this.state.streaks[goalId];
-    const maxStreak = maxBy(streaks, 'dateEnd');
-    const { dateEnd, interval } = maxStreak;
+  async createGoal(values) {
+    await rp({
+      uri: 'http://localhost:3000/users/2/goals',
+      json: true,
+      method: 'POST',
+      body: snakeCaseKeys(values),
+    });
+    const userData = await fetchUserData();
+    this.setState(userData);
+  }
 
-    if (isOngoing(dateEnd, interval)) {
+  async handleGoalClick(goalId) {
+    const streaks = this.state.streaks[goalId] || [];
+    const maxStreak = maxBy(streaks, 'dateEnd');
+
+    if (isOngoing(maxStreak)) {
       // update current streak to include today as well
       maxStreak.dateEnd = moment().format('YYYY-MM-DD');
       await updateStreak(maxStreak);
     } else {
       // there is no current streak to update,
-      // streak[0] is chosen to clone arbitrarily, any streak will do
-      // TODO what happens if there is no streak yet? (accumulator info should be on goal, not streak)
-      const newStreak = merge(cloneDeep(streaks[0]), {
+      const newStreak = {
         dateStart: moment().format('YYYY-MM-DD'),
         dateEnd: moment().format('YYYY-MM-DD'),
-      });
+        goalId,
+      };
       streaks.push(newStreak);
       await createNewStreak(newStreak);
     }
@@ -144,6 +156,11 @@ class Container extends Component {
             })}
           </div>
         )}
+
+        {/*
+            new goal
+        */}
+        <AddGoalModal createGoal={this.createGoal} />
       </div>
     );
   }

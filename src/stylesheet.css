@@ -16,6 +16,7 @@ body {
 .goal {
   padding: 20px;
   margin: 20px;
+  height: auto;
 }
 
 .streaks-container {
@@ -43,11 +44,19 @@ body {
   background: #80ced7;
 }
 
+.color-1:hover {
+  background: #80ced7;
+}
+
 .color-1-text {
   color: #80ced7;
 }
 
 .color-2 {
+  background: #63c7b2;
+}
+
+.color-2:hover {
   background: #63c7b2;
 }
 
@@ -59,6 +68,10 @@ body {
   background: #8e6c88;
 }
 
+.color-3:hover {
+  background: #8e6c88;
+}
+
 .color-3-text {
   color: #8e6c88;
 }
@@ -67,6 +80,34 @@ body {
   background: #263d42;
 }
 
+.color-4:hover {
+  background: #263d42;
+}
+
 .color-4-text {
   color: #263d42;
+}
+
+.color-14 {
+  background: black;
+}
+
+.color-14:hover {
+  background: black;
+}
+
+.color-14-text {
+  color: black;
+}
+
+.color-13 {
+  background: black;
+}
+
+.color-13:hover {
+  background: black;
+}
+
+.color-13-text {
+  color: black;
 }

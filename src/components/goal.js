@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'react-materialize';
 
 const propTypes = {
   id: PropTypes.number.isRequired,
@@ -10,10 +11,11 @@ const propTypes = {
 
 function Goal({ name, description, id, onClick }) {
   return (
-    <button className={`goal color-${id}`} onClick={() => onClick(id)}>
-      <div className="goal-name">{name}</div>
-      <div className="goal-description">{description}</div>
-    </button>
+    <Button className={`goal color-${id}`} onClick={() => onClick(id)} waves="light">
+      {name}
+      <br />
+      {description}
+    </Button>
   );
 }
 

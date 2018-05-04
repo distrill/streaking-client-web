@@ -25,10 +25,14 @@ const propTypes = {
       dateStart: PropTypes.string.isRequired,
       dateEnd: PropTypes.string.isRequired,
     })
-  ).isRequired,
+  ),
 };
 
-function Streak({ streaks, updateInterval, goalId }) {
+const defaultProps = {
+  streaks: [],
+};
+
+function Streak({ streaks = [], updateInterval, goalId }) {
   const chartStart = () =>
     moment()
       .subtract(6, 'months')
@@ -67,5 +71,6 @@ function Streak({ streaks, updateInterval, goalId }) {
 }
 
 Streak.propTypes = propTypes;
+Streak.defaultProps = defaultProps;
 
 export default Streak;
