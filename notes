@@ -3,11 +3,14 @@ TODO:
     [X] accumulator info should be on goal, get streak template from goal not streaks[0]
     [X] materialize
     [X] add new goal
+    [X] new streak fills up until today
+    [X] updateInterval form should be select from
     [ ] delete goal
-    [ ] new streak fills up until today
+    [ ] do something with accumulator
     [ ] handle errors
     [ ] login
     [ ] change goal color (persist? probably)
     [ ] refactor everything
+    [ ] colors (do better materialize in general)
 
     [ ] remove modal (what was this???)

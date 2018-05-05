@@ -51,7 +51,7 @@ function yesterday() {
     .format('YYYY-MM-DD');
 }
 
-function isOngoing(date, interval) {
+function isOngoing({ dateEnd: date, interval } = {}) {
   if (!date) return false;
   if (date === today()) return true;
   if (date === yesterday()) return true;

@@ -9,7 +9,7 @@ const propTypes = {
 
 const baseValuesState = {
   name: '',
-  updateInterval: '',
+  updateInterval: 'day',
   description: '',
   accumulatorKey: '',
   accumulatorIncrement: '',
@@ -71,6 +71,7 @@ class GoalModal extends Component {
         waves="light"
         type="submit"
         name="action"
+        onClick={this.handleSubmit}
       >
         Create
       </Button>
@@ -94,13 +95,19 @@ class GoalModal extends Component {
               onKeyDown={this.handleKeyDown}
               onChange={e => this.handleChange('name', e)}
             />
+
             <Input
               s={6}
+              type="select"
               label="Update Interval"
               value={this.state.values.updateInterval}
               onKeyDown={this.handleKeyDown}
               onChange={e => this.handleChange('updateInterval', e)}
-            />
+            >
+              <option value="day">Day</option>
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+            </Input>
             <Input
               s={12}
               label="Description"
