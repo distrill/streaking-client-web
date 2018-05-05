@@ -3,8 +3,10 @@ TODO:
     [X] accumulator info should be on goal, get streak template from goal not streaks[0]
     [X] materialize
     [X] add new goal
+    [ ] delete goal
+    [ ] new streak fills up until today
     [ ] handle errors
-    [ ] login-modal if not logged in
+    [ ] login
     [ ] change goal color (persist? probably)
     [ ] refactor everything
 
