@@ -121,7 +121,7 @@ class Container extends Component {
         {Object.values(this.state.goals).length && (
           <div className="streaks-container">
             {Object.values(this.state.goals).map(([goal]) => {
-              const { updateInterval, id: goalId } = goal;
+              const { updateInterval, id: goalId, color } = goal;
               const streaks = this.state.streaks[goalId];
               const key = shortId.generate();
               return (
@@ -130,6 +130,7 @@ class Container extends Component {
                   streaks={streaks}
                   goalId={goalId}
                   updateInterval={updateInterval}
+                  color={color}
                 />
               );
             })}
@@ -149,6 +150,7 @@ class Container extends Component {
                   key={key}
                   id={goal.id}
                   name={goal.name}
+                  color={goal.color}
                   description={goal.description}
                   onClick={this.handleGoalClick}
                 />

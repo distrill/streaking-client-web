@@ -1,11 +1,12 @@
 body {
   font: 14px 'Century Gothic', Futura, sans-serif;
   margin: 20px;
-  background: #ccdbdc;
+  background: #eceff1;
 }
 
 .goals-container {
-  margin-top: 10px;
+  width: 70%;
+  margin: 10px auto;
   text-align: center;
   display: flex;
   flex-direction: row;
@@ -14,9 +15,12 @@ body {
 }
 
 .goal {
-  padding: 20px;
-  margin: 20px;
-  height: auto;
+  width: 30%;
+  margin: 1.5%;
+}
+
+.goal-card-action {
+  width: 32%;
 }
 
 .streaks-container {
@@ -32,82 +36,15 @@ body {
 }
 
 .streak-interval {
-  background: #ccdbdc;
-  color: #ccdbdc;
+  color: #eceff1;
   height: 20px;
   width: 100%;
   text-align: center;
   border: solid rgba(0, 0, 0, 0.1) 1px;
 }
 
-.color-1 {
-  background: #80ced7;
+.fixed-action-btn {
+  position: relative;
 }
 
-.color-1:hover {
-  background: #80ced7;
-}
-
-.color-1-text {
-  color: #80ced7;
-}
-
-.color-2 {
-  background: #63c7b2;
-}
-
-.color-2:hover {
-  background: #63c7b2;
-}
-
-.color-2-text {
-  color: #63c7b2;
-}
-
-.color-3 {
-  background: #8e6c88;
-}
-
-.color-3:hover {
-  background: #8e6c88;
-}
-
-.color-3-text {
-  color: #8e6c88;
-}
-
-.color-4 {
-  background: #263d42;
-}
-
-.color-4:hover {
-  background: #263d42;
-}
-
-.color-4-text {
-  color: #263d42;
-}
-
-.color-9 {
-  background: black;
-}
-
-.color-9:hover {
-  background: black;
-}
-
-.color-9-text {
-  color: black;
-}
-
-.color-13 {
-  background: black;
-}
-
-.color-13:hover {
-  background: black;
-}
-
-.color-13-text {
-  color: black;
 }

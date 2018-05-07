@@ -20,6 +20,7 @@ function getFillIndexes({ dateStart, dateEnd }, updateInterval) {
 const propTypes = {
   goalId: PropTypes.number.isRequired,
   updateInterval: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
   streaks: PropTypes.arrayOf(
     PropTypes.shape({
       dateStart: PropTypes.string.isRequired,
@@ -32,7 +33,7 @@ const defaultProps = {
   streaks: [],
 };
 
-function Streak({ streaks = [], updateInterval, goalId }) {
+function Streak({ streaks = [], updateInterval, goalId, color }) {
   const chartStart = () =>
     moment()
       .subtract(6, 'months')
@@ -55,8 +56,9 @@ function Streak({ streaks = [], updateInterval, goalId }) {
     <div className="streak">
       {Object.values(intervals).map(interval => {
         const classes = ['streak-interval'];
+        const colorClasses = [color, `${color}-text`];
         if (indexes.includes(interval.dateStart)) {
-          classes.push(...[` color-${goalId}`, `color-${goalId}-text`]);
+          classes.push(...colorClasses);
         }
         const key = shortId.generate();
         return (

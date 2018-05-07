@@ -6,11 +6,35 @@ TODO:
     [X] new streak fills up until today
     [X] updateInterval form should be select from
     [ ] delete goal
-    [ ] do something with accumulator
-    [ ] handle errors
+    [ ] edit goal
+    [ ] tooltip hover streak to see goal
     [ ] login
+    [ ] handle errors
+    [ ] do something with accumulator
     [ ] change goal color (persist? probably)
     [ ] refactor everything
     [ ] colors (do better materialize in general)
 
     [ ] remove modal (what was this???)
+
+``` javascript
+const colors = [ 'red',
+  'pink',
+  'purple',
+  'deep-purple',
+  'indigo',
+  'blue',
+  'light-blue',
+  'cyan',
+  'teal',
+  'green',
+  'light-green',
+  'lime',
+  'yellow',
+  'amber',
+  'orange',
+  'deep-orange',
+  'brown',
+  'grey',
+  'blue-grey' ]
+```
