@@ -5,7 +5,7 @@ TODO:
     [X] add new goal
     [X] new streak fills up until today
     [X] updateInterval form should be select from
-    [ ] delete goal
+    [X] delete goal
     [ ] edit goal
     [ ] tooltip hover streak to see goal
     [ ] login
@@ -14,6 +14,7 @@ TODO:
     [ ] change goal color (persist? probably)
     [ ] refactor everything
     [ ] colors (do better materialize in general)
+    [ ] user should be able to pick color theme (reds, blues, greens, their color list will be greens)
 
     [ ] remove modal (what was this???)
 

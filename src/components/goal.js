@@ -1,35 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon, Card } from 'react-materialize';
+import shortId from 'shortid';
 
 const propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  deleteGoal: PropTypes.func.isRequired,
 };
 
-function buildCardAction(color, icon) {
+function buildCardAction(color, icon, onClick) {
+  const key = shortId.generate();
   return (
-    <Button className={`goal-card-action ${color}`}>
+    <Button key={key} className={`goal-card-action ${color}`} onClick={onClick}>
       <Icon>{icon}</Icon>
     </Button>
   );
 }
 
-function Goal({ name, description, id, onClick, color }) {
+function Goal({ name, description, id, color, deleteGoal }) {
   const classes = ['goal', 'grey', 'lighten-5'];
+
   return (
     <Card
       className={classes.join(' ')}
       title={name}
       actions={[
-        buildCardAction(color, 'edit'),
-        buildCardAction(color, 'color_lens'),
-        buildCardAction(color, 'delete'),
+        buildCardAction(color, 'edit', () => console.log('whatever')),
+        buildCardAction(color, 'color_lens', () => console.log('whatever')),
+        buildCardAction(color, 'delete', () => deleteGoal(id)),
       ]}
-      onClick={() => onClick(id)}
     >
       <p>{description}</p>
     </Card>

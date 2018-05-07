@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import rp from 'request-promise';
-import { groupBy, flatten, maxBy, omit } from 'lodash';
+import { groupBy, flatten, maxBy, omit, without, sample } from 'lodash';
 import camelCaseKeys from 'camelcase-keys';
 import snakeCaseKeys from 'snakecase-keys';
 import shortId from 'shortid';
@@ -8,6 +8,28 @@ import moment from 'moment';
 import Goal from './goal';
 import GoalStreak from './goal_streak';
 import AddGoalModal from './add_goal_modal';
+
+const colors = [
+  'red',
+  'pink',
+  'purple',
+  'deep-purple',
+  'indigo',
+  'blue',
+  'light-blue',
+  'cyan',
+  'teal',
+  'green',
+  'light-green',
+  'lime',
+  'yellow',
+  'amber',
+  'orange',
+  'deep-orange',
+  // 'brown',
+  'grey',
+  'blue-grey',
+];
 
 async function fetchUserData() {
   const options = {
@@ -68,6 +90,7 @@ class Container extends Component {
 
     this.handleGoalClick = this.handleGoalClick.bind(this);
     this.createGoal = this.createGoal.bind(this);
+    this.deleteGoal = this.deleteGoal.bind(this);
   }
 
   async componentDidMount() {
@@ -75,12 +98,33 @@ class Container extends Component {
     this.setState(userData);
   }
 
+  getColor() {
+    const goals = flatten(Object.values(this.state.goals));
+    const currentColors = goals.map(goal => goal.color);
+    if (currentColors.length === colors.length) return sample(colors);
+    return sample(without(colors, currentColors));
+  }
+
   async createGoal(values) {
+    if (!values.color) {
+      // eslint-disable-next-line no-param-reassign
+      values.color = this.getColor();
+    }
     await rp({
       uri: 'http://localhost:3000/users/2/goals',
       json: true,
       method: 'POST',
       body: snakeCaseKeys(values),
+    });
+    const userData = await fetchUserData();
+    this.setState(userData);
+  }
+
+  async deleteGoal(id) {
+    await rp({
+      uri: `http://localhost:3000/users/2/goals/${id}`,
+      json: true,
+      method: 'DELETE',
     });
     const userData = await fetchUserData();
     this.setState(userData);
@@ -152,7 +196,7 @@ class Container extends Component {
                   name={goal.name}
                   color={goal.color}
                   description={goal.description}
-                  onClick={this.handleGoalClick}
+                  deleteGoal={this.deleteGoal}
                 />
               );
             })}
