@@ -26,7 +26,6 @@ const colors = [
   'amber',
   'orange',
   'deep-orange',
-  // 'brown',
   'grey',
   'blue-grey',
 ];
