@@ -4,16 +4,34 @@ import PropTypes from 'prop-types';
 import { merge, cloneDeep } from 'lodash';
 
 const propTypes = {
-  createGoal: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  triggerButton: PropTypes.node,
+  modalId: PropTypes.string,
+  actionButtonLabel: PropTypes.string,
+  goal: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    updateInterval: PropTypes.string,
+    description: PropTypes.string,
+    accumulatorKey: PropTypes.string,
+    accumulatorIncrement: PropTypes.string,
+    accumulatorDescription: PropTypes.string,
+  }),
 };
 
-const baseValuesState = {
-  name: '',
-  updateInterval: 'day',
-  description: '',
-  accumulatorKey: '',
-  accumulatorIncrement: '',
-  accumulatorDescription: '',
+const defaultProps = {
+  triggerButton: null,
+  modalId: '',
+  actionButtonLabel: 'CREATE',
+  goal: {
+    id: 0,
+    name: '',
+    updateInterval: 'day',
+    description: '',
+    accumulatorKey: '',
+    accumulatorIncrement: '',
+    accumulatorDescription: '',
+  },
 };
 
 class GoalModal extends Component {
@@ -22,13 +40,19 @@ class GoalModal extends Component {
     this.state = {
       isSubmitDisabled: true,
       isModalOpen: false,
-      values: cloneDeep(baseValuesState),
+      values: cloneDeep(props.goal),
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.isFormValid = this.isFormValid.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.isFormValid()) {
+      this.setState({ isSubmitDisabled: false });
+    }
   }
 
   handleChange(field, event) {
@@ -43,8 +67,8 @@ class GoalModal extends Component {
   // eslint-disable-next-line class-methods-use-this
   handleSubmit() {
     const { values } = this.state;
-    this.setState({ isModalOpen: false, values: cloneDeep(baseValuesState) });
-    return this.props.createGoal(values).then(() => console.log('submit as'));
+    this.setState({ isModalOpen: false, values: cloneDeep(defaultProps.goal) });
+    return this.props.handleSubmit(values);
   }
 
   handleKeyDown(e) {
@@ -73,20 +97,17 @@ class GoalModal extends Component {
         name="action"
         onClick={this.handleSubmit}
       >
-        Create
+        {this.props.actionButtonLabel}
       </Button>
-    );
-
-    const triggerButton = (
-      <Button floating large className="add-goal red" waves="light" icon="add" />
     );
 
     return (
       <Modal
         header="Add a New Goal"
-        trigger={triggerButton}
+        trigger={this.props.triggerButton}
         actions={actionButton}
         open={this.state.isModalOpen}
+        id={this.props.modalId}
       >
         <Row>
           <form onSubmit={this.handleSubmit}>
@@ -146,5 +167,6 @@ class GoalModal extends Component {
 }
 
 GoalModal.propTypes = propTypes;
+GoalModal.defaultProps = defaultProps;
 
 export default GoalModal;

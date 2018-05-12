@@ -8,6 +8,7 @@ const propTypes = {
   /* eslint-disable react/forbid-prop-types */
   goals: PropTypes.object,
   /* eslint-enable react/forbid-prop-types */
+  updateGoal: PropTypes.func.isRequired,
   deleteGoal: PropTypes.func.isRequired,
   handleGoalClick: PropTypes.func.isRequired,
 };
@@ -16,7 +17,7 @@ const defaultProps = {
   goals: {},
 };
 
-function Goals({ goals, deleteGoal, handleGoalClick }) {
+function Goals({ goals, updateGoal, deleteGoal, handleGoalClick }) {
   return (
     <div className="goals-container">
       {Object.values(goals).length > 0 &&
@@ -25,12 +26,10 @@ function Goals({ goals, deleteGoal, handleGoalClick }) {
           return (
             <Goal
               key={key}
-              id={goal.id}
-              name={goal.name}
-              color={goal.color}
-              description={goal.description}
+              goal={goal}
               deleteGoal={deleteGoal}
               newStreakDay={handleGoalClick}
+              updateGoal={updateGoal}
             />
           );
         })}

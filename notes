@@ -8,14 +8,14 @@ TODO:
     [X] delete goal
     [X] login
     [X] overlay when no goals
+    [X] colors (do better materialize in general)
     [X] loading animation
-    [ ] refactor everything
+    [X] refactor everything
     [ ] edit goal
+    [ ] change goal color (color)
     [ ] tooltip hover streak to see goal (hover goal, elipses goal when 2long)
     [ ] handle errors
     [ ] do something with accumulator
-    [ ] change goal color
-    [ ] colors (do better materialize in general)
     [ ] user should be able to pick color theme (reds, blues, greens, their color list will be greens)
 
     [ ] remove modal (what was this???)

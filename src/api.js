@@ -49,6 +49,15 @@ export function createNewGoal(goal) {
   });
 }
 
+export function updateGoal(goal) {
+  return rp({
+    uri: `${baseUrl}/api/goals/${goal.id}`,
+    json: true,
+    method: 'PUT',
+    body: goal,
+  });
+}
+
 export function deleteGoal(id) {
   return rp({
     uri: `${baseUrl}/api/goals/${id}`,

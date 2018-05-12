@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Goals from './goals';
 import Streaks from './streaks';
-import EditGoal from './edit_goal';
+import CreateGoal from './create_goal';
 import NoContent from './no_content';
 
 const propTypes = {
@@ -14,6 +14,7 @@ const propTypes = {
   deleteGoal: PropTypes.func.isRequired,
   handleGoalClick: PropTypes.func.isRequired,
   createGoal: PropTypes.func.isRequired,
+  updateGoal: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -21,12 +22,25 @@ const defaultProps = {
   streaks: {},
 };
 
-function Application({ goals, streaks, isFetching, deleteGoal, handleGoalClick, createGoal }) {
+function Application({
+  goals,
+  streaks,
+  isFetching,
+  deleteGoal,
+  handleGoalClick,
+  createGoal,
+  updateGoal,
+}) {
   return (
     <div className={`application ${isFetching ? 'hide' : ''}`}>
       <Streaks goals={goals} streaks={streaks} />
-      <Goals goals={goals} deleteGoal={deleteGoal} handleGoalClick={handleGoalClick} />
-      <EditGoal createGoal={createGoal} />
+      <Goals
+        goals={goals}
+        deleteGoal={deleteGoal}
+        updateGoal={updateGoal}
+        handleGoalClick={handleGoalClick}
+      />
+      <CreateGoal handleSubmit={createGoal} />
       <NoContent goalsLength={Object.values(goals).length} />
     </div>
   );

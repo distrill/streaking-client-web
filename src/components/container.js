@@ -5,7 +5,14 @@ import LoadingOverlay from './loading_overlay';
 import Header from './header';
 import Application from './application';
 import { baseColors } from './../config';
-import { fetchUserData, createNewGoal, deleteGoal, createNewStreak, updateStreak } from './../api';
+import {
+  fetchUserData,
+  createNewGoal,
+  updateGoal,
+  deleteGoal,
+  createNewStreak,
+  updateStreak,
+} from './../api';
 import { isOngoing } from './../util';
 
 class Container extends Component {
@@ -19,6 +26,7 @@ class Container extends Component {
 
     this.handleGoalClick = this.handleGoalClick.bind(this);
     this.createGoal = this.createGoal.bind(this);
+    this.updateGoal = this.updateGoal.bind(this);
     this.deleteGoal = this.deleteGoal.bind(this);
   }
 
@@ -41,6 +49,12 @@ class Container extends Component {
         color: goal.color || this.getColor(),
       })
     );
+    const userData = await fetchUserData();
+    this.setState(userData);
+  }
+
+  async updateGoal(goal) {
+    await updateGoal(goal);
     const userData = await fetchUserData();
     this.setState(userData);
   }
@@ -83,9 +97,10 @@ class Container extends Component {
           goals={this.state.goals}
           streaks={this.state.streaks}
           isFetching={this.state.isFetching}
+          createGoal={this.createGoal}
+          updateGoal={this.updateGoal}
           deleteGoal={this.deleteGoal}
           handleGoalClick={this.handleGoalClick}
-          createGoal={this.createGoal}
         />
 
         <LoadingOverlay isFetching={this.state.isFetching} />
