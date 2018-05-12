@@ -11,7 +11,7 @@ TODO:
     [X] colors (do better materialize in general)
     [X] loading animation
     [X] refactor everything
-    [ ] edit goal
+    [X] edit goal
     [ ] change goal color (color)
     [ ] tooltip hover streak to see goal (hover goal, elipses goal when 2long)
     [ ] handle errors
