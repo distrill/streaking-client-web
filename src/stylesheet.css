@@ -2,6 +2,7 @@ body {
   font: 14px 'Century Gothic', Futura, sans-serif;
   margin: 20px;
   background: #eceff1;
+  box-sizing: border-box;
 }
 
 .goals-container {
@@ -49,8 +50,35 @@ body {
 
 .header {
   margin: 0 20px;
+  position: relative;
+  z-index: 100;
 }
 
 .fixed-action-btn {
   position: relative;
+}
+
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */
+  height: 100%;
+  width: 100%;
+  position: fixed; /* Stay in place */
+  /* z-index: 1; Sit on top */
+  left: 0;
+  top: 0;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  /* display: none ; */
+}
+
+.no-content {
+  background: blue;
+}
+
+.loading-progress {
+  width: 30%;
+  margin: 15% auto;
+}
+
+.hide {
+  display: none;
 }

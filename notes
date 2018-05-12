@@ -6,13 +6,15 @@ TODO:
     [X] new streak fills up until today
     [X] updateInterval form should be select from
     [X] delete goal
-    [ ] login
+    [X] login
+    [ ] overlay when no goals
+    [ ] loading animation
+    [ ] refactor everything
     [ ] edit goal
     [ ] tooltip hover streak to see goal (hover goal, elipses goal when 2long)
     [ ] handle errors
     [ ] do something with accumulator
     [ ] change goal color
-    [ ] refactor everything
     [ ] colors (do better materialize in general)
     [ ] user should be able to pick color theme (reds, blues, greens, their color list will be greens)
 
