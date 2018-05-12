@@ -1,11 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { authUrl } from './../config';
 
-const propTypes = {
-  authUrl: PropTypes.string.isRequired,
-};
-
-function Header({ authUrl }) {
+function Header() {
   return (
     <div className="header">
       {"this is the hook. it's catchy. you like it."}
@@ -15,7 +11,5 @@ function Header({ authUrl }) {
     </div>
   );
 }
-
-Header.propTypes = propTypes;
 
 export default Header;
