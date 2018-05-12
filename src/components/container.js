@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import rp from 'request-promise';
 import { merge, groupBy, flatten, maxBy, without, sample } from 'lodash';
-import shortId from 'shortid';
 import moment from 'moment';
-import { Col, Card, Row } from 'react-materialize';
-import Goal from './goal';
-import GoalStreak from './goal_streak';
-import AddGoalModal from './add_goal_modal';
 import LoadingOverlay from './loading_overlay';
+import Header from './header';
+import Application from './application';
 
 // move me
 const colors = [
@@ -31,7 +28,8 @@ const colors = [
   'blue-grey',
 ];
 
-const baseUrl = 'http://streakingapp.com';
+const baseUrl = process.env.REACT_APP_BASE_URL || 'http://streakingapp.com';
+const authUrl = process.env.REACT_APP_AUTH_URL || baseUrl;
 
 async function fetchUserData() {
   const options = {
@@ -49,7 +47,7 @@ async function fetchUserData() {
     })
     .catch(err => {
       console.log(err);
-      window.location.href = `${baseUrl}/login`;
+      window.location.href = `${authUrl}/login`;
     });
 }
 
@@ -182,74 +180,17 @@ class Container extends Component {
 
   render() {
     return (
-      <div className="wrapper">
-        <div className="header">
-          {"this is the hook. it's catchy. you like it."}
-          <a className="logout" href="/logout">
-            logout
-          </a>
-        </div>
-        <div className={`application ${this.state.isFetching ? 'hide' : ''}`}>
-          {/*
-            streaks - stored in state keyed by goalId
-            we want to retain this grouping in child component
-        */}
-          {Object.values(this.state.goals).length > 0 && (
-            <div className="streaks-container">
-              {Object.values(this.state.goals).map(([goal]) => {
-                console.log('goal:', goal);
-                const { updateInterval, id: goalId, color } = goal;
-                const streaks = this.state.streaks[goalId];
-                const key = shortId.generate();
-                return (
-                  <GoalStreak
-                    key={key}
-                    streaks={streaks}
-                    goalId={goalId}
-                    updateInterval={updateInterval}
-                    color={color}
-                  />
-                );
-              })}
-            </div>
-          )}
+      <div>
+        <Header authUrl={authUrl} />
 
-          {/*
-            goals - stored in state keyed by id
-            we want flat array of goals
-        */}
-          {Object.values(this.state.goals).length > 0 && (
-            <div className="goals-container">
-              {flatten(Object.values(this.state.goals)).map(goal => {
-                const key = shortId.generate();
-                return (
-                  <Goal
-                    key={key}
-                    id={goal.id}
-                    name={goal.name}
-                    color={goal.color}
-                    description={goal.description}
-                    deleteGoal={this.deleteGoal}
-                    newStreakDay={this.handleGoalClick}
-                  />
-                );
-              })}
-            </div>
-          )}
-
-          {Object.values(this.state.goals).length === 0 && (
-            <Row>
-              <Col s={6} offset="s3">
-                <Card className="grey lighten-4" title="Get started by adding a goal below!" />
-              </Col>
-            </Row>
-          )}
-
-          {/*
-            new goal
-        */}
-          <AddGoalModal createGoal={this.createGoal} />
-        </div>
+        <Application
+          goals={this.state.goals}
+          streaks={this.state.streaks}
+          isFetching={this.state.isFetching}
+          deleteGoal={this.deleteGoal}
+          handleGoalClick={this.handleGoalClick}
+          createGoal={this.createGoal}
+        />
 
         <LoadingOverlay isFetching={this.state.isFetching} />
       </div>

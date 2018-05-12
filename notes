@@ -20,6 +20,33 @@ TODO:
 
     [ ] remove modal (what was this???)
 
+
+refactor!!!!
+    components:
+        container
+            header
+                hook is catchy
+                logout
+                more nav?
+            application
+                streaks
+                    [streak]
+                goals
+                    [goal]
+            no-content
+            loading
+            edit goal:
+                entry points:
+                    new goal (application)
+                    new goal (no-content)
+                    edit goal (goal-card)
+
+    pull me out of components pls:
+        * config
+        * api
+        * util
+
+
 ``` javascript
 const colors = [ 'red',
   'pink',

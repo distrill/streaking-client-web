@@ -21,7 +21,7 @@ const propTypes = {
   goalId: PropTypes.number.isRequired,
   updateInterval: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
-  streaks: PropTypes.arrayOf(
+  goalStreaks: PropTypes.arrayOf(
     PropTypes.shape({
       dateStart: PropTypes.string.isRequired,
       dateEnd: PropTypes.string.isRequired,
@@ -30,17 +30,17 @@ const propTypes = {
 };
 
 const defaultProps = {
-  streaks: [],
+  goalStreaks: [],
 };
 
-function Streak({ streaks = [], updateInterval, goalId, color }) {
+function Streak({ goalStreaks, updateInterval, goalId, color }) {
   const chartStart = () =>
     moment()
       .subtract(6, 'months')
       .startOf(updateInterval);
   const chartEnd = () => moment();
   const numIntervals = chartEnd().diff(chartStart(), updateInterval);
-  const indexes = flatten(streaks.map(streak => getFillIndexes(streak, updateInterval)));
+  const indexes = flatten(goalStreaks.map(streak => getFillIndexes(streak, updateInterval)));
 
   const intervals = new Array(numIntervals).fill(null).map((_, i) => {
     return {
