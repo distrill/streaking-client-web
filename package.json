@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "camelcase-keys": "^4.2.0",
     "eslint-config-uncoil": "^5.0.1",
     "lodash": "^4.17.5",
     "moment": "^2.22.1",
@@ -19,7 +18,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build":
+      "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
@@ -30,6 +30,5 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.4.0"
-  },
-  "proxy": "http://localhost:8080/"
+  }
 }

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import rp from 'request-promise';
-import { groupBy, flatten, maxBy, omit, without, sample } from 'lodash';
-import camelCaseKeys from 'camelcase-keys';
-import snakeCaseKeys from 'snakecase-keys';
+import { groupBy, flatten, maxBy, without, sample } from 'lodash';
 import shortId from 'shortid';
 import moment from 'moment';
 import Goal from './goal';
 import GoalStreak from './goal_streak';
 import AddGoalModal from './add_goal_modal';
 
+// move me
 const colors = [
   'red',
   'pink',
@@ -30,36 +29,70 @@ const colors = [
   'blue-grey',
 ];
 
+const baseUrl = 'http://streakingapp.com';
+
 async function fetchUserData() {
   const options = {
-    uri: 'http://localhost:3000/users/2',
+    uri: `${baseUrl}/api/me`,
     json: true,
   };
-  return rp(options).then(userInfo => {
-    const { goals, streaks } = userInfo;
+  return rp(options)
+    .then(userInfo => {
+      const { goals, streaks } = userInfo;
 
-    const goalInfo = groupBy(camelCaseKeys(goals), 'id');
-    const streakInfo = groupBy(camelCaseKeys(streaks), 'goalId');
+      const goalInfo = groupBy(goals, 'id');
+      const streakInfo = groupBy(streaks, 'goalId');
 
-    return { goals: goalInfo, streaks: streakInfo };
-  });
-}
-
-function writeStreak(streak, method) {
-  return rp({
-    uri: 'http://localhost:3000/users/2/streaks',
-    json: true,
-    method,
-    body: snakeCaseKeys(streak),
-  });
+      return { goals: goalInfo, streaks: streakInfo };
+    })
+    .catch(err => {
+      console.log(err);
+      window.location.href = `${baseUrl}/login`;
+    });
 }
 
 function createNewStreak(streak) {
-  return writeStreak(omit(streak, 'id'), 'POST');
+  return rp({
+    uri: `${baseUrl}/api/streaks`,
+    json: true,
+    method: 'POST',
+    body: streak,
+  });
 }
 
 function updateStreak(streak) {
-  return writeStreak(streak, 'PUT');
+  return rp({
+    uri: `${baseUrl}/api/streaks/${streak.id}`,
+    json: true,
+    method: 'PUT',
+    body: streak,
+  });
+}
+
+function createNewGoal(goal) {
+  return rp({
+    uri: `${baseUrl}/api/goals`,
+    json: true,
+    method: 'POST',
+    body: goal,
+  });
+}
+
+// function updateGoal(goal) {
+//   return rp({
+//     uri: `${baseUrl}/api/goals/${goal.id}`,
+//     json: true,
+//     method: 'PUT',
+//     body: snakeCaseKeys(goal),
+//   });
+// }
+
+function deleteGoal(id) {
+  return rp({
+    uri: `${baseUrl}/api/goals/${id}`,
+    json: true,
+    method: 'DELETE',
+  });
 }
 
 function today() {
@@ -104,27 +137,18 @@ class Container extends Component {
     return sample(without(colors, currentColors));
   }
 
-  async createGoal(values) {
-    if (!values.color) {
-      // eslint-disable-next-line no-param-reassign
-      values.color = this.getColor();
-    }
-    await rp({
-      uri: 'http://localhost:3000/users/2/goals',
-      json: true,
-      method: 'POST',
-      body: snakeCaseKeys(values),
-    });
+  async createGoal(goal) {
+    await createNewGoal(
+      Object.assign({}, goal, {
+        color: goal.color || this.getColor(),
+      })
+    );
     const userData = await fetchUserData();
     this.setState(userData);
   }
 
   async deleteGoal(id) {
-    await rp({
-      uri: `http://localhost:3000/users/2/goals/${id}`,
-      json: true,
-      method: 'DELETE',
-    });
+    await deleteGoal(id);
     const userData = await fetchUserData();
     this.setState(userData);
   }
@@ -155,7 +179,12 @@ class Container extends Component {
   render() {
     return (
       <div>
-        {"this is the hook. it's catchy. you like it."}
+        <div className="header">
+          {"this is the hook. it's catchy. you like it."}
+          <a className="logout" href="/logout">
+            logout
+          </a>
+        </div>
 
         {/*
             streaks - stored in state keyed by goalId
@@ -164,6 +193,7 @@ class Container extends Component {
         {Object.values(this.state.goals).length && (
           <div className="streaks-container">
             {Object.values(this.state.goals).map(([goal]) => {
+              console.log('goal:', goal);
               const { updateInterval, id: goalId, color } = goal;
               const streaks = this.state.streaks[goalId];
               const key = shortId.generate();
@@ -196,6 +226,7 @@ class Container extends Component {
                   color={goal.color}
                   description={goal.description}
                   deleteGoal={this.deleteGoal}
+                  newStreakDay={this.handleGoalClick}
                 />
               );
             })}

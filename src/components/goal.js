@@ -9,6 +9,7 @@ const propTypes = {
   description: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   deleteGoal: PropTypes.func.isRequired,
+  newStreakDay: PropTypes.func.isRequired,
 };
 
 function buildCardAction(color, icon, onClick) {
@@ -20,7 +21,7 @@ function buildCardAction(color, icon, onClick) {
   );
 }
 
-function Goal({ name, description, id, color, deleteGoal }) {
+function Goal({ name, description, id, color, deleteGoal, newStreakDay }) {
   const classes = ['goal', 'grey', 'lighten-5'];
 
   return (
@@ -31,6 +32,7 @@ function Goal({ name, description, id, color, deleteGoal }) {
         buildCardAction(color, 'edit', () => console.log('whatever')),
         buildCardAction(color, 'color_lens', () => console.log('whatever')),
         buildCardAction(color, 'delete', () => deleteGoal(id)),
+        buildCardAction(color, 'add_to_photos', () => newStreakDay(id)),
       ]}
     >
       <p>{description}</p>

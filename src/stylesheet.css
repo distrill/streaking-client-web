@@ -20,7 +20,7 @@ body {
 }
 
 .goal-card-action {
-  width: 32%;
+  width: 24%;
 }
 
 .streaks-container {
@@ -41,6 +41,14 @@ body {
   width: 100%;
   text-align: center;
   border: solid rgba(0, 0, 0, 0.1) 1px;
+}
+
+.logout {
+  float: right;
+}
+
+.header {
+  margin: 0 20px;
 }
 
 .fixed-action-btn {
