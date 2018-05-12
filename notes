@@ -7,8 +7,8 @@ TODO:
     [X] updateInterval form should be select from
     [X] delete goal
     [X] login
-    [ ] overlay when no goals
-    [ ] loading animation
+    [X] overlay when no goals
+    [X] loading animation
     [ ] refactor everything
     [ ] edit goal
     [ ] tooltip hover streak to see goal (hover goal, elipses goal when 2long)
