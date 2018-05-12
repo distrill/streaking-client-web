@@ -54,3 +54,7 @@ body {
 .fixed-action-btn {
   position: relative;
 }
+
+.add-goal {
+  margin-top: 20px;
+}

@@ -77,7 +77,7 @@ class GoalModal extends Component {
       </Button>
     );
 
-    const triggerButton = <Button floating large className="red" waves="light" icon="add" />;
+    const triggerButton = <Button floating large className="add-goal red" waves="light" icon="add" />;
 
     return (
       <Modal

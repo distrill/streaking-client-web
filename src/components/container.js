@@ -190,7 +190,7 @@ class Container extends Component {
             streaks - stored in state keyed by goalId
             we want to retain this grouping in child component
         */}
-        {Object.values(this.state.goals).length && (
+        {Object.values(this.state.goals).length > 0 && (
           <div className="streaks-container">
             {Object.values(this.state.goals).map(([goal]) => {
               console.log('goal:', goal);
@@ -214,7 +214,7 @@ class Container extends Component {
             goals - stored in state keyed by id
             we want flat array of goals
         */}
-        {Object.values(this.state.goals).length && (
+        {Object.values(this.state.goals).length > 0 && (
           <div className="goals-container">
             {flatten(Object.values(this.state.goals)).map(goal => {
               const key = shortId.generate();
