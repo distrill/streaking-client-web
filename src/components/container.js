@@ -194,6 +194,7 @@ class Container extends Component {
             streaks - stored in state keyed by goalId
             we want to retain this grouping in child component
         */}
+<<<<<<< HEAD
           {Object.values(this.state.goals).length > 0 && (
             <div className="streaks-container">
               {Object.values(this.state.goals).map(([goal]) => {
@@ -246,6 +247,52 @@ class Container extends Component {
           )}
 
           {/*
+=======
+        {Object.values(this.state.goals).length > 0 && (
+          <div className="streaks-container">
+            {Object.values(this.state.goals).map(([goal]) => {
+              console.log('goal:', goal);
+              const { updateInterval, id: goalId, color } = goal;
+              const streaks = this.state.streaks[goalId];
+              const key = shortId.generate();
+              return (
+                <GoalStreak
+                  key={key}
+                  streaks={streaks}
+                  goalId={goalId}
+                  updateInterval={updateInterval}
+                  color={color}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {/*
+            goals - stored in state keyed by id
+            we want flat array of goals
+        */}
+        {Object.values(this.state.goals).length > 0 && (
+          <div className="goals-container">
+            {flatten(Object.values(this.state.goals)).map(goal => {
+              const key = shortId.generate();
+              return (
+                <Goal
+                  key={key}
+                  id={goal.id}
+                  name={goal.name}
+                  color={goal.color}
+                  description={goal.description}
+                  deleteGoal={this.deleteGoal}
+                  newStreakDay={this.handleGoalClick}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {/*
+>>>>>>> dafa0a6c79012800131607a76c47ec3b53622d74
             new goal
         */}
           <AddGoalModal createGoal={this.createGoal} />
