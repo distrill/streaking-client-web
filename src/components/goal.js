@@ -71,6 +71,7 @@ function Goal({ goal, updateGoal, deleteGoal, newStreakDay }) {
         triggerButton={null}
         modalId={editGoalModalId}
         actionButtonLabel="update"
+        header="Edit Goal"
       />
       <PickColor modalId={pickColorModalId} updateColor={updateColor} />
     </div>

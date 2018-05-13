@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
-import { Modal, Button, Row, Input } from 'react-materialize';
+import { Modal, Button, Row, Input, Collapsible, CollapsibleItem } from 'react-materialize';
 import PropTypes from 'prop-types';
-import { merge, omit, cloneDeep } from 'lodash';
+import { merge, cloneDeep } from 'lodash';
+
+const emptyGoal = {
+  id: 0,
+  name: '',
+  updateInterval: 'day',
+  description: '',
+  accumulatorKey: '',
+  accumulatorIncrement: '',
+  accumulatorDescription: '',
+};
 
 const propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   triggerButton: PropTypes.node,
   modalId: PropTypes.string,
   actionButtonLabel: PropTypes.string,
+  header: PropTypes.string,
   goal: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -23,15 +34,8 @@ const defaultProps = {
   triggerButton: null,
   modalId: '',
   actionButtonLabel: 'CREATE',
-  goal: {
-    id: 0,
-    name: '',
-    updateInterval: 'day',
-    description: '',
-    accumulatorKey: '',
-    accumulatorIncrement: '',
-    accumulatorDescription: '',
-  },
+  header: 'Add a New Goal',
+  goal: cloneDeep(emptyGoal),
 };
 
 class GoalModal extends Component {
@@ -39,8 +43,8 @@ class GoalModal extends Component {
     super(props);
     this.state = {
       isSubmitDisabled: true,
-      isModalOpen: false,
       values: props.goal,
+      modalOpen: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -58,7 +62,10 @@ class GoalModal extends Component {
   }
 
   handleChange(field, event) {
-    this.setState({ values: merge(this.state.values, { [field]: event.target.value }) });
+    this.setState({
+      modalOpen: true,
+      values: merge(this.state.values, { [field]: event.target.value }),
+    });
     if (this.isFormValid()) {
       this.setState({ isSubmitDisabled: false });
     } else {
@@ -68,7 +75,7 @@ class GoalModal extends Component {
 
   handleSubmit() {
     const { values } = this.state;
-    this.setState({ isModalOpen: false, values: cloneDeep(defaultProps.goal) });
+    this.setState({ values: cloneDeep(emptyGoal), modalOpen: false });
     return this.props.handleSubmit(values);
   }
 
@@ -78,12 +85,11 @@ class GoalModal extends Component {
         return this.handleSubmit();
       }
     }
-    return this.setState({ isModalOpen: true });
+    return this.setState({ modalOpen: true });
   }
 
   isFormValid() {
-    const values = Object.values(omit(this.state.values, 'id'));
-    return values.filter(e => e).length === values.length;
+    return this.state.values.name !== '' && this.state.values.description !== '';
   }
 
   render() {
@@ -102,64 +108,82 @@ class GoalModal extends Component {
 
     return (
       <Modal
-        header="Add a New Goal"
+        header={this.props.header}
         trigger={this.props.triggerButton}
         actions={actionButton}
-        open={this.state.isModalOpen}
         id={this.props.modalId}
+        open={this.state.modalOpen}
+        fixedFooter // can we set this dynamically? should only be fixed if content is taller than modal
       >
-        <Row>
-          <form onSubmit={this.handleSubmit}>
-            <Input
-              s={6}
-              label="Name"
-              value={this.state.values.name}
-              onKeyDown={this.handleKeyDown}
-              onChange={e => this.handleChange('name', e)}
-            />
+        <form onSubmit={this.handleSubmit}>
+          <Collapsible defaultActiveKey={0}>
+            <CollapsibleItem header="Describe Goal">
+              <Row>
+                <Input
+                  s={6}
+                  label="Name"
+                  value={this.state.values.name}
+                  onKeyDown={this.handleKeyDown}
+                  onChange={e => this.handleChange('name', e)}
+                />
 
-            <Input
-              s={6}
-              type="select"
-              label="Update Interval"
-              value={this.state.values.updateInterval}
-              onKeyDown={this.handleKeyDown}
-              onChange={e => this.handleChange('updateInterval', e)}
-            >
-              <option value="day">Day</option>
-              <option value="week">Week</option>
-              <option value="month">Month</option>
-            </Input>
-            <Input
-              s={12}
-              label="Description"
-              value={this.state.values.description}
-              onKeyDown={this.handleKeyDown}
-              onChange={e => this.handleChange('description', e)}
-            />
-            <Input
-              s={6}
-              label="Accumulator Key"
-              value={this.state.values.accumulatorKey}
-              onKeyDown={this.handleKeyDown}
-              onChange={e => this.handleChange('accumulatorKey', e)}
-            />
-            <Input
-              s={6}
-              label="Accumulator Increment"
-              value={this.state.values.accumulatorIncrement}
-              onKeyDown={this.handleKeyDown}
-              onChange={e => this.handleChange('accumulatorIncrement', e)}
-            />
-            <Input
-              s={12}
-              label="Accumulator Description"
-              value={this.state.values.accumulatorDescription}
-              onKeyDown={this.handleKeyDown}
-              onChange={e => this.handleChange('accumulatorDescription', e)}
-            />
-          </form>
-        </Row>
+                <Input
+                  s={6}
+                  type="select"
+                  label="How often do you want to check in?"
+                  value={this.state.values.updateInterval}
+                  onKeyDown={this.handleKeyDown}
+                  onChange={e => this.handleChange('updateInterval', e)}
+                >
+                  <option value="day">Day</option>
+                  <option value="week">Week</option>
+                  <option value="month">Month</option>
+                </Input>
+                <Input
+                  s={12}
+                  label="Description"
+                  value={this.state.values.description}
+                  onKeyDown={this.handleKeyDown}
+                  onChange={e => this.handleChange('description', e)}
+                />
+              </Row>
+            </CollapsibleItem>
+
+            <CollapsibleItem header="Tracking">
+              Do you want to track anything as you progress?<br />
+              <span className="subtle">
+                {
+                  "This is passive and should only be a rough estimate, we'll do this automatically when you check in."
+                }
+                <br />
+                {"We're after overall progress / improvement rather than strict measurement."}
+              </span>
+              <Row>
+                <Input
+                  s={6}
+                  label="What do you want to track? (ex km run)"
+                  value={this.state.values.accumulatorKey}
+                  onKeyDown={this.handleKeyDown}
+                  onChange={e => this.handleChange('accumulatorKey', e)}
+                />
+                <Input
+                  s={6}
+                  label={`How much do you expect to track every ${
+                    this.state.values.updateInterval
+                  }? (ex 4)`}
+                  value={this.state.values.accumulatorIncrement}
+                  onKeyDown={this.handleKeyDown}
+                  onChange={e => this.handleChange('accumulatorIncrement', e)}
+                />
+              </Row>
+              <em>
+                I expect to track <b>{this.state.values.accumulatorIncrement || '4'} </b>
+                <b>{this.state.values.accumulatorKey || 'km run'}</b> every{' '}
+                {this.state.values.updateInterval}.
+              </em>
+            </CollapsibleItem>
+          </Collapsible>
+        </form>
       </Modal>
     );
   }

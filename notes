@@ -15,7 +15,7 @@ TODO:
     [X] change goal color (color)
     [X] sunday (only?) week week doesn't work to add
         fix - were getting number of indexes wrong, needed to start at beginning of interval (would have failed for month as well)
-    [ ] improve add-goal modal (hide accum at first? pages with questions?)
+    [X] improve add-goal modal (hide accum at first? pages with questions?)
     [ ] do something with accumulator
     [ ] tooltip hover streak to see goal (hover goal, elipses goal when 2long)
     [ ] handle errors

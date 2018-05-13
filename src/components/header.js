@@ -4,7 +4,7 @@ import { authUrl } from './../config';
 function Header() {
   return (
     <div className="header">
-      {"this is the hook. it's catchy. you like it."}
+      <img className="nav-logo" src="logo_side.png" alt="streaking man" />
       <a className="logout" href={`${authUrl}/logout`}>
         logout
       </a>
