@@ -82,3 +82,16 @@ body {
 .hide {
   display: none;
 }
+
+.colors-container {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.color-button {
+  width: 28%;
+  margin: 1.5%;
+}

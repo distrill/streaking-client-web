@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Icon, Card } from 'react-materialize';
 import shortId from 'shortid';
 import EditGoal from './edit_goal';
+import PickColor from './pick_color';
 
 const propTypes = {
   goal: PropTypes.shape({
@@ -29,13 +30,25 @@ function Goal({ goal, updateGoal, deleteGoal, newStreakDay }) {
   const classes = ['grey', 'lighten-5'];
 
   const { id, name, description, color } = goal;
-  const modalId = `goal-modal-${id}`;
+  const editGoalModalId = `goal-modal-${id}`;
+  const pickColorModalId = `color-modal-${id}`;
 
   function openEditModal() {
     // ew. jquery is required by react-materialize.
     // see https://react-materialize.github.io/#/modals
     // eslint-disable-next-line no-undef
-    $(`#${modalId}`).modal('open');
+    $(`#${editGoalModalId}`).modal('open');
+  }
+
+  function openPickColorModal() {
+    // ew. jquery is required by react-materialize.
+    // see https://react-materialize.github.io/#/modals
+    // eslint-disable-next-line no-undef
+    $(`#${pickColorModalId}`).modal('open');
+  }
+
+  async function updateColor(newColor) {
+    updateGoal(Object.assign({}, goal, { color: newColor }));
   }
 
   return (
@@ -45,7 +58,7 @@ function Goal({ goal, updateGoal, deleteGoal, newStreakDay }) {
         title={name}
         actions={[
           buildCardAction(color, 'edit', () => openEditModal()),
-          buildCardAction(color, 'color_lens', () => console.log('whatever')),
+          buildCardAction(color, 'color_lens', () => openPickColorModal()),
           buildCardAction(color, 'delete', () => deleteGoal(id)),
           buildCardAction(color, 'add_to_photos', () => newStreakDay(id)),
         ]}
@@ -56,9 +69,10 @@ function Goal({ goal, updateGoal, deleteGoal, newStreakDay }) {
         handleSubmit={updateGoal}
         goal={goal}
         triggerButton={null}
-        modalId={modalId}
+        modalId={editGoalModalId}
         actionButtonLabel="update"
       />
+      <PickColor modalId={pickColorModalId} updateColor={updateColor} />
     </div>
   );
 }

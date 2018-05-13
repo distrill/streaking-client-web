@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Row, Input } from 'react-materialize';
 import PropTypes from 'prop-types';
-import { merge, cloneDeep } from 'lodash';
+import { merge, omit, cloneDeep } from 'lodash';
 
 const propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -40,7 +40,7 @@ class GoalModal extends Component {
     this.state = {
       isSubmitDisabled: true,
       isModalOpen: false,
-      values: cloneDeep(props.goal),
+      values: props.goal,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -51,7 +51,9 @@ class GoalModal extends Component {
 
   componentDidMount() {
     if (this.isFormValid()) {
-      this.setState({ isSubmitDisabled: false });
+      this.setState({
+        isSubmitDisabled: false,
+      });
     }
   }
 
@@ -64,7 +66,6 @@ class GoalModal extends Component {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   handleSubmit() {
     const { values } = this.state;
     this.setState({ isModalOpen: false, values: cloneDeep(defaultProps.goal) });
@@ -81,10 +82,8 @@ class GoalModal extends Component {
   }
 
   isFormValid() {
-    return (
-      Object.values(this.state.values).filter(e => e).length ===
-      Object.values(this.state.values).length
-    );
+    const values = Object.values(omit(this.state.values, 'id'));
+    return values.filter(e => e).length === values.length;
   }
 
   render() {
