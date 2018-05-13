@@ -5,7 +5,7 @@ import { flatten } from 'lodash';
 import shortId from 'shortid';
 
 function getFillIndexes({ dateStart, dateEnd }, updateInterval) {
-  const intervalStart = () => moment(dateStart, 'YYYY-MM-DD');
+  const intervalStart = () => moment(dateStart, 'YYYY-MM-DD').startOf(updateInterval);
   const intervalEnd = () => moment(dateEnd, 'YYYY-MM-DD');
 
   const numIntervals = intervalEnd().diff(intervalStart(), updateInterval) + 1; // +1 here to include today

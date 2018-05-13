@@ -24,7 +24,7 @@ class Container extends Component {
       isFetching: true,
     };
 
-    this.handleGoalClick = this.handleGoalClick.bind(this);
+    this.newStreakDay = this.newStreakDay.bind(this);
     this.createGoal = this.createGoal.bind(this);
     this.updateGoal = this.updateGoal.bind(this);
     this.deleteGoal = this.deleteGoal.bind(this);
@@ -65,7 +65,7 @@ class Container extends Component {
     this.setState(userData);
   }
 
-  async handleGoalClick(goalId) {
+  async newStreakDay(goalId) {
     const streaks = this.state.streaks[goalId] || [];
     const maxStreak = maxBy(streaks, 'dateEnd');
 
@@ -100,7 +100,7 @@ class Container extends Component {
           createGoal={this.createGoal}
           updateGoal={this.updateGoal}
           deleteGoal={this.deleteGoal}
-          handleGoalClick={this.handleGoalClick}
+          newStreakDay={this.newStreakDay}
         />
 
         <LoadingOverlay isFetching={this.state.isFetching} />

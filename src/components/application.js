@@ -12,7 +12,7 @@ const propTypes = {
   /* eslint-enable react/forbid-prop-types */
   isFetching: PropTypes.bool.isRequired,
   deleteGoal: PropTypes.func.isRequired,
-  handleGoalClick: PropTypes.func.isRequired,
+  newStreakDay: PropTypes.func.isRequired,
   createGoal: PropTypes.func.isRequired,
   updateGoal: PropTypes.func.isRequired,
 };
@@ -27,7 +27,7 @@ function Application({
   streaks,
   isFetching,
   deleteGoal,
-  handleGoalClick,
+  newStreakDay,
   createGoal,
   updateGoal,
 }) {
@@ -38,7 +38,7 @@ function Application({
         goals={goals}
         deleteGoal={deleteGoal}
         updateGoal={updateGoal}
-        handleGoalClick={handleGoalClick}
+        newStreakDay={newStreakDay}
       />
       <CreateGoal handleSubmit={createGoal} />
       <NoContent goalsLength={Object.values(goals).length} />
