@@ -12,10 +12,11 @@ TODO:
     [X] loading animation
     [X] refactor everything
     [X] edit goal
-    [ ] change goal color (color)
+    [X] change goal color (color)
+    [ ] do something with accumulator
+    [ ] improve add-goal modal (hide accum at first? pages with questions?)
     [ ] tooltip hover streak to see goal (hover goal, elipses goal when 2long)
     [ ] handle errors
-    [ ] do something with accumulator
     [ ] user should be able to pick color theme (reds, blues, greens, their color list will be greens)
 
     [ ] remove modal (what was this???)
